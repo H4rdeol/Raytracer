@@ -9,13 +9,13 @@
 
 ConfigSubject::ConfigSubject(const std::string &path, NamePipe &pipe) : _path(path)
 {
-    _pipe = std::make_shared<NamePipe>(pipe);
+    _input = std::make_shared<NamePipe>(pipe);
     _last_write_time = std::filesystem::file_time_type::min();
 }
 
 bool ConfigSubject::_isFinished(void) const
 {
-    std::optional<std::string> data = _pipe->read();
+    std::optional<std::string> data = _input->read();
 
     if (!data)
         return false;
@@ -41,7 +41,7 @@ void ConfigSubject::notifyObservers()
             for (auto &observer : _list_observers)
                 observer->update(_root.dump());
         }
-    } while (true);
+    } while (!_isFinished());
 }
 
 ConfigSubject::ConfigError::ConfigError(const std::string &message) : _message(message)

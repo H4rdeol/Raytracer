@@ -35,17 +35,23 @@ void NamePipe::write(const std::string &data) const
 std::optional<std::string> NamePipe::read(void) const
 {
     char buffer[BUFFER_SIZE] = {0};
-    int bytes = ::read(_fd, buffer, sizeof(buffer));
-    std::string data(buffer, bytes);
+    int bytes = 0;
+    std::string data;
+    fd_set readfds;
+    struct timeval tv;
 
-    if (bytes == -1)
+    FD_ZERO(&readfds);
+    FD_SET(_fd, &readfds);
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+
+    if (select(_fd + 1, &readfds, nullptr, nullptr, &tv) <= 0)
         return std::nullopt;
-
-    // while ((bytes = ::read(_fd, buffer, sizeof(buffer))) > 0) {
-    //     std::cout << "read: " << data << std::endl;
-    //     data += std::string(buffer, bytes);
-    // }
-    // std::cout << data << std::endl;
+    while ((bytes = ::read(_fd, buffer, sizeof(buffer))) > 0) {
+        data += std::string(buffer, bytes);
+        if (static_cast<size_t>(bytes) < BUFFER_SIZE)
+            break;
+    }
     return data;
 }
 

@@ -37,7 +37,7 @@ class ConfigSubject: public ASubject {
         [[nodiscard]] bool _isFinished(void) const;
     private:
         std::string _path;
-        std::shared_ptr<NamePipe> _pipe;
+        std::shared_ptr<NamePipe> _input;
         json _root;
         std::filesystem::file_time_type _last_write_time;
 };
