@@ -7,8 +7,17 @@
 
 #include "ConfigObserver.hpp"
 
-ConfigObserver::ConfigObserver(ASubject &subject)
+ConfigObserver::ConfigObserver(ASubject &subject, NamePipe &pipe)
 {
-    _subject = std::make_unique<ASubject>(subject);
-    _subject->subscribe(*this);
+    subject.subscribe(*this);
+    _pipe = std::make_shared<NamePipe>(pipe);
+}
+
+void ConfigObserver::update(const std::string &data)
+{
+    try {
+        _pipe->write(data);
+    } catch (const NamePipe::PipeError &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
 }

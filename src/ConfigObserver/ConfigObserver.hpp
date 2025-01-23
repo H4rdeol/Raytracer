@@ -9,14 +9,16 @@
 
 #include "IObserver.hpp"
 #include "ASubject.hpp"
+#include "NamePipe/NamePipe.hpp"
 
-#include <memory>
+#include <iostream>
 
 class ConfigObserver final: public IObserver {
     public:
-        ConfigObserver(ASubject &subject);
+        ConfigObserver(ASubject &subject, NamePipe &pipe);
         ~ConfigObserver() final = default;
 
+        void update(const std::string &data) final;
     private:
-        std::unique_ptr<ASubject> _subject;
+        std::shared_ptr<NamePipe> _pipe;
 };

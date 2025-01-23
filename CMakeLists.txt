@@ -19,6 +19,7 @@ else()
 endif()
 
 find_package(SFML 3.0 REQUIRED COMPONENTS Graphics Audio System Window)
+find_package(nlohmann_json 3.11.3 REQUIRED)
 
 add_executable(my_program 
     src/Main.cpp
@@ -27,10 +28,20 @@ add_executable(my_program
     include/IObserver.hpp
     include/ISubject.hpp
     include/ASubject.cpp
+    src/NamePipe/NamePipe.cpp
+    src/NamePipe/NamePipe.hpp
+    src/ConfigSubject/ConfigSubject.cpp
+    src/ConfigSubject/ConfigSubject.hpp
 )
 
-target_include_directories(my_program PUBLIC include)
-target_link_libraries(my_program PRIVATE SFML::Graphics SFML::Audio SFML::System SFML::Window)
+target_include_directories(my_program 
+    PUBLIC include
+    PRIVATE src
+)
+target_link_libraries(my_program
+    PRIVATE SFML::Graphics SFML::Audio SFML::System SFML::Window
+    nlohmann_json::nlohmann_json
+)
 
 add_custom_target(clean_build
     COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}

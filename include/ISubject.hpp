@@ -15,5 +15,5 @@ class ISubject {
         virtual ~ISubject() = default;
         virtual void subscribe(IObserver &observer) = 0;
         virtual void unsubscribe(std::shared_ptr<IObserver> &observer) = 0;
-        virtual void notifyObservers(const std::any &data) = 0;
+        virtual void notifyObservers(void) = 0;
 };
