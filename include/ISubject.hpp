@@ -10,10 +10,12 @@
 #include "IObserver.hpp"
 #include <memory>
 
-class ISubject {
-    public:
-        virtual ~ISubject() = default;
-        virtual void subscribe(IObserver &observer) = 0;
-        virtual void unsubscribe(std::shared_ptr<IObserver> &observer) = 0;
-        virtual void notifyObservers(void) = 0;
-};
+namespace Observer {
+    class ISubject {
+        public:
+            virtual ~ISubject() = default;
+            virtual void subscribe(IObserver &observer) = 0;
+            virtual void unsubscribe(std::shared_ptr<IObserver> &observer) = 0;
+            virtual void notifyObservers(void) = 0;
+    };
+}

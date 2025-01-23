@@ -9,8 +9,10 @@
 
 #include <string>
 
-class IObserver {
-    public:
-        virtual ~IObserver() = default;
-        virtual void update(const std::string &data) = 0;
-};
+namespace Observer {
+    class IObserver {
+        public:
+            virtual ~IObserver() = default;
+            virtual void update(const std::string &data) = 0;
+    };
+}

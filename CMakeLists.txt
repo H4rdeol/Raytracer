@@ -29,9 +29,8 @@ add_executable(my_program
     include/ISubject.hpp
     include/ASubject.cpp
     src/NamePipe/NamePipe.cpp
-    src/NamePipe/NamePipe.hpp
     src/ConfigSubject/ConfigSubject.cpp
-    src/ConfigSubject/ConfigSubject.hpp
+    src/ConfigUpdater/ConfigUpdater.cpp
 )
 
 target_include_directories(my_program 

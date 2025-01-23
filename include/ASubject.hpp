@@ -11,12 +11,14 @@
 #include <vector>
 #include <algorithm>
 
-class ASubject: public ISubject {
-    public:
-        virtual ~ASubject() = default;
-        virtual void subscribe(IObserver &observer) override;
-        virtual void unsubscribe(std::shared_ptr<IObserver> &observer) override;
-
-    protected:
-        std::vector<std::shared_ptr<IObserver>> _list_observers;
-};
+namespace Observer {
+    class ASubject: public ISubject {
+        public:
+            virtual ~ASubject() = default;
+            virtual void subscribe(IObserver &observer) override;
+            virtual void unsubscribe(std::shared_ptr<IObserver> &observer) override;
+    
+        protected:
+            std::vector<std::shared_ptr<IObserver>> _list_observers;
+    };
+}
