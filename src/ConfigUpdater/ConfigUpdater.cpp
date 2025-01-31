@@ -20,6 +20,11 @@ namespace Observer {
             stop();
     }
 
+    std::optional<std::string> ConfigUpdater::getConfig(void) const
+    {
+        return _output->read();
+    }
+
     void ConfigUpdater::start(const std::string &config_path)
     {
         pid_t pid = 0;
@@ -36,7 +41,7 @@ namespace Observer {
             Observer::ConfigObserver observer(subject, _output);
             subject.notifyObservers();
             std::cout << "Stoping observer: don't refresh config anymore" << std::endl;
-            exit(0);
+            _exit(0);
         }
     }
 

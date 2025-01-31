@@ -20,6 +20,7 @@ endif()
 
 find_package(SFML 3.0 REQUIRED COMPONENTS Graphics Audio System Window)
 find_package(nlohmann_json 3.11.3 REQUIRED)
+find_package(glm 0.9.9.8 REQUIRED)
 
 add_executable(my_program 
     src/Main.cpp

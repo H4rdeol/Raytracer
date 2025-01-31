@@ -27,6 +27,7 @@ namespace Observer {
 
             void start(const std::string &config_path);
             void stop(void);
+            [[nodiscard]] std::optional<std::string> getConfig(void) const;
         private:
             bool _running = false;
             std::shared_ptr<IPC::NamePipe> _input;

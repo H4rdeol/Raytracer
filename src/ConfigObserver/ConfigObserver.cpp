@@ -12,7 +12,6 @@ namespace Observer {
     {
         subject.subscribe(*this);
         _pipe = pipe;
-        std::cout << "ConfigObserver: " << _pipe.use_count() << std::endl;
     }
     
     void ConfigObserver::update(const std::string &data)
