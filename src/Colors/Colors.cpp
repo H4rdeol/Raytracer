@@ -8,7 +8,8 @@
 #include "Colors.hpp"
 
 namespace Application {
-    Color::Color(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a)
+
+    constexpr Color::Color(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a)
     {
         _color = 0;
 
@@ -25,16 +26,26 @@ namespace Application {
 
     std::uint8_t Color::green() const
     {
-        return (_color >> 16) & 255;
+        return (_color >> 16) & 0x000000ff;
     }
 
     std::uint8_t Color::blue() const
     {
-        return (_color >> 8) & 255;
+        return (_color >> 8) & 0x000000ff;
     }
 
     std::uint8_t Color::alpha() const
     {
-        return _color & 255;
+        return _color & 0x000000ff;
     }
-}
+
+    constexpr Color Color::Red(255, 0, 0);
+    constexpr Color Color::Green(0, 255, 0);
+    constexpr Color Color::Blue(0, 0, 255);
+    constexpr Color Color::Yellow(255, 255, 0);
+    constexpr Color Color::Magenta(255, 0, 255);
+    constexpr Color Color::Cyan(0, 255, 255);
+    constexpr Color Color::Black(0, 0, 0);
+    constexpr Color Color::White(255, 255, 255);
+    constexpr Color Color::Transparent(0, 0, 0, 0);
+} // namespace Application
