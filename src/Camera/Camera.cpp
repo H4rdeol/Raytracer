@@ -8,11 +8,9 @@
 #include "Camera.hpp"
 
 namespace Application {
-    Camera::Camera()
+    void Camera::update(const std::string &config)
     {
-    }
+        auto data = nlohmann::json::parse(config);
 
-    Camera::~Camera()
-    {
     }
 }

@@ -12,19 +12,17 @@
 
 #include <fstream>
 #include <filesystem>
-#include <optional>
 #include <memory>
-#include <thread>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 
 namespace Observer {
-    class ConfigSubject: public ASubject {
+    class ConfigSubject final: public ASubject {
         public:
             ConfigSubject(const std::string &path, const std::shared_ptr<IPC::NamePipe> pipe);
             ~ConfigSubject() final = default;
-    
+
             class ConfigError : public std::exception {
                 public:
                     ConfigError(const std::string &message);
@@ -32,7 +30,7 @@ namespace Observer {
                 private:
                     std::string _message;
             };
-    
+
             void notifyObservers(void) final;
             void setRefreshRate(const std::size_t rate);
         private:

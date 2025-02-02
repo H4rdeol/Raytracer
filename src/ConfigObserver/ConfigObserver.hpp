@@ -18,7 +18,7 @@ namespace Observer {
         public:
             ConfigObserver(ASubject &subject, const std::shared_ptr<IPC::NamePipe> pipe);
             ~ConfigObserver() final = default;
-    
+
             void update(const std::string &data) final;
         private:
             std::shared_ptr<IPC::NamePipe> _pipe;

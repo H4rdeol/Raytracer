@@ -6,7 +6,10 @@
 */
 
 #include <iostream>
+#include <ostream>
+#include <thread>
 #include "ConfigUpdater/ConfigUpdater.hpp"
+#include "Colors/Colors.hpp"
 
 int main(void)
 {
@@ -18,5 +21,6 @@ int main(void)
             std::cout << config.value() << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
+
     return 0;
 }

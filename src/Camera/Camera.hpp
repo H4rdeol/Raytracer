@@ -9,12 +9,13 @@
 
 #include <glm/glm.hpp>
 #include <string>
+#include <nlohmann/json.hpp>
 
 namespace Application {
     class Camera {
         public:
-            Camera();
-            ~Camera();
+            Camera() = default;
+            ~Camera() = default;
 
             void update(const std::string &config);
         private:
@@ -22,6 +23,6 @@ namespace Application {
             glm::vec3 _position;
             glm::vec3 _rotation;
             double _fov;
-            glm::vec3 _color;
+            glm::vec<4, unsigned int> _color;
     };
 }

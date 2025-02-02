@@ -25,6 +25,7 @@ find_package(glm 0.9.9.8 REQUIRED)
 
 add_executable(my_program
     src/Main.cpp
+    src/Colors/Colors.cpp
     src/ConfigObserver/ConfigObserver.cpp
     include/ASubject.hpp
     include/IObserver.hpp

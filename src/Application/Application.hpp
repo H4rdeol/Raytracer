@@ -9,8 +9,8 @@
 
 class Application {
     public:
-        Application() = default;
-        ~Application() = default;
+        Application();
+        ~Application();
 
 
     protected:

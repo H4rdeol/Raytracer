@@ -31,7 +31,7 @@ namespace Observer {
 
         if (_running)
             throw ConfigUpdaterError("ConfigUpdater already running");
-        
+
         _running = true;
         pid = fork();
         if (pid == -1) {
@@ -49,7 +49,7 @@ namespace Observer {
     {
         if (!_running)
             throw ConfigUpdaterError("ConfigUpdater not running");
-        
+
         _input->write("finished");
         _running = false;
     }
