@@ -11,6 +11,7 @@
 int main(void)
 {
     Observer::ConfigUpdater updater;
+
     updater.start("assets/configs/test.cfg");
     while (true) {
         if (auto config = updater.getConfig())

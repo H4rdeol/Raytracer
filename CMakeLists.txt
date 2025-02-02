@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(my_project)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -22,7 +23,7 @@ find_package(SFML 3.0 REQUIRED COMPONENTS Graphics Audio System Window)
 find_package(nlohmann_json 3.11.3 REQUIRED)
 find_package(glm 0.9.9.8 REQUIRED)
 
-add_executable(my_program 
+add_executable(my_program
     src/Main.cpp
     src/ConfigObserver/ConfigObserver.cpp
     include/ASubject.hpp
@@ -34,7 +35,7 @@ add_executable(my_program
     src/ConfigUpdater/ConfigUpdater.cpp
 )
 
-target_include_directories(my_program 
+target_include_directories(my_program
     PUBLIC include
     PRIVATE src
 )
