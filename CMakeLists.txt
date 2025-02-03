@@ -25,6 +25,8 @@ find_package(glm 0.9.9.8 REQUIRED)
 
 add_executable(my_program
     src/Main.cpp
+    src/Camera/Camera.cpp
+    src/Application/Application.cpp
     src/Colors/Colors.cpp
     src/ConfigObserver/ConfigObserver.cpp
     include/ASubject.hpp

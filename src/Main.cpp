@@ -5,28 +5,31 @@
 ** Main
 */
 
-#include <iostream>
-#include <ostream>
 #include <thread>
+#include "Application/Application.hpp"
 #include "ConfigUpdater/ConfigUpdater.hpp"
-#include "Colors/Colors.hpp"
 
-
-using namespace Application;
+//TODO: @LO change cmake to find new .cpp
 int main(void)
 {
-    /*Observer::ConfigUpdater updater;
+    Application::Camera player("assets/configs/test.cfg");
+    Application::Application app(player);
 
-    updater.start("assets/configs/test.cfg");
-    while (true) {
-        if (auto config = updater.getConfig())
-            std::cout << config.value() << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    }*/
+    std::thread observer_thread(
+        [](const Application::Application &app) {
+            Observer::ConfigUpdater updater;
 
-    std::cout << "Red: " << static_cast<int>(Color::Blue.red()) << std::endl;
-    std::cout << "Green: " << static_cast<int>(Color::Blue.green()) << std::endl;
-    std::cout << "Blue: " << static_cast<int>(Color::Blue.blue()) << std::endl;
-    std::cout << "Alpha: " << static_cast<int>(Color::Blue.alpha()) << std::endl;
+            updater.start("assets/configs/test.cfg");
+            while (app.isRunning()) {
+                if (auto config = updater.getConfig())
+                    app.camera->update(config.value());
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            }
+            updater.stop();
+        },
+        std::ref(app)
+    );
+
+    observer_thread.join();
     return 0;
 }

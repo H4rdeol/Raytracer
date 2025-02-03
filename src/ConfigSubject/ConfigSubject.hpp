@@ -10,7 +10,6 @@
 #include "ASubject.hpp"
 #include "NamePipe/NamePipe.hpp"
 
-#include <fstream>
 #include <filesystem>
 #include <memory>
 #include <nlohmann/json.hpp>

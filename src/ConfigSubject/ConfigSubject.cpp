@@ -7,6 +7,7 @@
 
 #include "ConfigSubject.hpp"
 #include <thread>
+#include <fstream>
 
 namespace Observer {
     ConfigSubject::ConfigSubject(const std::string &path, const std::shared_ptr<IPC::NamePipe> pipe) : _path(path)

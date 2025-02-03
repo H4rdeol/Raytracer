@@ -13,7 +13,7 @@ namespace Observer {
         subject.subscribe(*this);
         _pipe = pipe;
     }
-    
+
     void ConfigObserver::update(const std::string &data)
     {
         try {

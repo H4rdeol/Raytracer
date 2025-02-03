@@ -6,11 +6,18 @@
 */
 
 #include "Application.hpp"
+#include "Camera/Camera.hpp"
+#include <memory>
 
-Application::Application()
-{
-}
+namespace Application {
+    Application::Application(const Camera &camera) :
+        camera(std::make_unique<Camera>(camera))
+    {
+        _window.setSize({ this->camera->getSize().x, this->camera->getSize().y });
+    }
 
-Application::~Application()
-{
+    bool Application::isRunning() const
+    {
+        return _isRunning;
+    }
 }

@@ -6,6 +6,7 @@
 */
 
 #include "Colors.hpp"
+#include <ostream>
 
 namespace Application {
 
@@ -14,10 +15,13 @@ namespace Application {
         _color = 0;
 
         (_color |= r) <<= 24;
-        _color |= (((std::uint32_t) g) << 16);
-        _color |= (((std::uint32_t) b) << 8);
+        _color |= ((static_cast<std::uint32_t>(g)) << 16);
+        _color |= ((static_cast<std::uint32_t>(b)) << 8);
         _color |= a;
     }
+
+    constexpr Color::Color(const std::uint32_t color) : _color(color)
+    {}
 
     std::uint8_t Color::red() const
     {
@@ -37,6 +41,14 @@ namespace Application {
     std::uint8_t Color::alpha() const
     {
         return _color & 0x000000ff;
+    }
+
+    std::ostream &operator<<(std::ostream &out, const Color &color)
+    {
+        return out << "r: " << static_cast<int>(color.red())
+            << ", g: " << static_cast<int>(color.green())
+            << ", b: " << static_cast<int>(color.blue())
+            << ", a: " << static_cast<int>(color.alpha());
     }
 
     constexpr Color Color::Red(255, 0, 0);

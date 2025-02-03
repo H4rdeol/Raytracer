@@ -8,13 +8,14 @@
 #pragma once
 
 #include <cstdint>
+#include <ostream>
 
 namespace Application {
     class Color {
         public:
             constexpr Color() = default;
             constexpr Color(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a = 255);
-            constexpr explicit Color(std::uint32_t color);
+            constexpr explicit Color(const std::uint32_t color);
             ~Color() = default;
 
             [[nodiscard]] std::uint8_t red() const;
@@ -36,4 +37,6 @@ namespace Application {
             std::uint32_t _color;
 
     };
+
+    std::ostream &operator<<(std::ostream &out, const Color &color);
 }

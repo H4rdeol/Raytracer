@@ -7,12 +7,22 @@
 
 #pragma once
 
-class Application {
-    public:
-        Application();
-        ~Application();
+#include "Camera/Camera.hpp"
+#include <SFML/Graphics.hpp>
+#include <memory>
 
+namespace Application {
+    class Application {
+        public:
+            Application(const Camera &camera);
+            Application() = delete;
+            ~Application() = default;
 
-    protected:
-    private:
-};
+            [[nodiscard]] bool isRunning() const;
+        public:
+            const std::unique_ptr<Camera> camera;
+        private:
+            bool _isRunning = true;
+            sf::RenderWindow _window;
+    };
+}

@@ -14,7 +14,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
 #include <iostream>
 
 namespace IPC {
@@ -22,7 +21,7 @@ namespace IPC {
         public:
             NamePipe(const std::string &path = "/tmp/namepipe");
             ~NamePipe();
-    
+
             class PipeError : public std::exception {
                 public:
                     PipeError(const std::string &message);
@@ -30,7 +29,7 @@ namespace IPC {
                 private:
                     std::string _message;
             };
-    
+
             void write(const std::string &data) const;
             [[nodiscard]] std::optional<std::string> read(void) const;
         public:
