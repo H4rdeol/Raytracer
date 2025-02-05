@@ -28,6 +28,7 @@ add_executable(my_program
     src/Camera/Camera.cpp
     src/Application/Application.cpp
     src/Colors/Colors.cpp
+    src/Colors/Colors.hpp
     src/ConfigObserver/ConfigObserver.cpp
     include/ASubject.hpp
     include/IObserver.hpp

@@ -6,7 +6,11 @@
 */
 
 #include "Camera.hpp"
+#include "Colors/Colors.hpp"
+#include <cstdint>
 #include <fstream>
+#include <iostream>
+#include <mutex>
 #include <nlohmann/json.hpp>
 
 namespace Application {
@@ -29,6 +33,7 @@ namespace Application {
         auto data = nlohmann::json::parse(config);
 
         setWithJson(data);
+        std::lock_guard<std::mutex> lock(_changedMutex);
         _changed = true;
     }
 
@@ -43,7 +48,11 @@ namespace Application {
         _position = { position[0], position[1], position[2] };
         _rotation = { rotation[0], rotation[1], rotation[2] };
         _fov = data["camera"]["fov"];
-        _color = { color[0], color[1], color[2], ((color.size() == 4) ? static_cast<unsigned int>(color[3]) : 255) };
+        Color tmp(color[0], color[1], color[2], (color.size() == 4) ?
+            static_cast<std::uint8_t>(color[3]) :
+            255
+        );
+        _color = tmp;
     }
 
     glm::vec<2, unsigned int> Camera::getSize() const
@@ -66,7 +75,7 @@ namespace Application {
         return _fov;
     }
 
-    glm::vec<4, uint8_t> Camera::getColor() const
+    Color Camera::getColor() const
     {
         return _color;
     }

@@ -10,18 +10,11 @@
 
 namespace Application {
 
-    constexpr Color::Color(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a)
+    Color &Color::operator=(Color &other)
     {
-        _color = 0;
-
-        (_color |= r) <<= 24;
-        _color |= ((static_cast<std::uint32_t>(g)) << 16);
-        _color |= ((static_cast<std::uint32_t>(b)) << 8);
-        _color |= a;
+        _color = other._color;
+        return *this;
     }
-
-    constexpr Color::Color(const std::uint32_t color) : _color(color)
-    {}
 
     std::uint8_t Color::red() const
     {
@@ -41,6 +34,11 @@ namespace Application {
     std::uint8_t Color::alpha() const
     {
         return _color & 0x000000ff;
+    }
+
+    std::uint32_t Color::getColorInt() const
+    {
+        return _color;
     }
 
     std::ostream &operator<<(std::ostream &out, const Color &color)

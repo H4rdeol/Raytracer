@@ -12,10 +12,9 @@
 //TODO: @LO change cmake to find new .cpp
 int main(void)
 {
-    Application::Camera player("assets/configs/test.cfg");
-    Application::Application app(player);
+    Application::Application app("assets/configs/test.cfg");
 
-    std::thread observer_thread(
+    std::jthread observer_thread(
         [](const Application::Application &app) {
             Observer::ConfigUpdater updater;
 
@@ -30,6 +29,7 @@ int main(void)
         std::ref(app)
     );
 
+    app.run();
     observer_thread.join();
     return 0;
 }
