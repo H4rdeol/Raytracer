@@ -18,8 +18,8 @@ namespace Application {
             {}
             constexpr explicit Color(const std::uint32_t color) : _color(color)
             {}
-
             constexpr Color() = default;
+            Color(const Color &color) = default;
             ~Color() = default;
 
             Color &operator=(Color &other);
