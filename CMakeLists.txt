@@ -23,21 +23,14 @@ find_package(SFML 3.0 REQUIRED COMPONENTS Graphics Audio System Window)
 find_package(nlohmann_json 3.11.3 REQUIRED)
 find_package(glm 0.9.9.8 REQUIRED)
 
-add_executable(my_program
-    src/Main.cpp
-    src/Camera/Camera.cpp
-    src/Application/Application.cpp
-    src/Colors/Colors.cpp
-    src/Colors/Colors.hpp
-    src/ConfigObserver/ConfigObserver.cpp
-    include/ASubject.hpp
-    include/IObserver.hpp
-    include/ISubject.hpp
-    include/ASubject.cpp
-    src/NamePipe/NamePipe.cpp
-    src/ConfigSubject/ConfigSubject.cpp
-    src/ConfigUpdater/ConfigUpdater.cpp
+#find all cpp in src directory and subdirectories
+file(GLOB_RECURSE SOURCES
+        "src/*.cpp"
+        "include/*.cpp"
+        "src/**/*.cpp"
 )
+
+add_executable(my_program ${SOURCES})
 
 target_include_directories(my_program
     PUBLIC include

@@ -2,3 +2,4 @@ build/
 *.o
 .cache/
 .vscode/
+.idea/

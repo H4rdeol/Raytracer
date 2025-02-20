@@ -10,18 +10,18 @@
 #include "ConfigUpdater/ConfigUpdater.hpp"
 
 //TODO: @LO change cmake to find new .cpp
-int main(void)
+int main()
 {
     Application::Application app("assets/configs/test.cfg");
 
     std::jthread observer_thread(
-        [](const Application::Application &app) {
+        [](const Application::Application &appl) {
             Observer::ConfigUpdater updater;
 
             updater.start("assets/configs/test.cfg");
-            while (app.isRunning()) {
+            while (appl.isRunning()) {
                 if (auto config = updater.getConfig())
-                    app.camera->update(config.value());
+                    appl.camera->update(config.value());
                 std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
             updater.stop();
