@@ -6,6 +6,9 @@
 */
 
 #include "Application.hpp"
+
+#include <iostream>
+
 #include "Camera/Camera.hpp"
 #include "Colors/Colors.hpp"
 #include <SFML/System/Clock.hpp>
@@ -14,15 +17,15 @@
 #include <memory>
 
 namespace Application {
-    Application::Application(const std::string &path) :
-        camera(std::make_unique<Camera>(path))
+    Application::Application(const std::string &path)
+        : camera(std::make_unique<Camera>(path)), _windowSize(this->camera->getSize()),
+          _texture({_windowSize.x, _windowSize.y}), _sprite(_texture)
     {
-        _windowSize = this->camera->getSize();
         _window.create(
-            sf::VideoMode({ _windowSize.x, _windowSize.y }, _bitPerPixels),
-            "Raytracer"
+            sf::VideoMode({_windowSize.x, _windowSize.y}, _bitPerPixels),
+            "Raytracer",
+            sf::Style::Close
         );
-        _backGroundColor = sf::Color(this->camera->getColor().getColorInt());
     }
 
     void Application::refreshConfig()
@@ -35,7 +38,20 @@ namespace Application {
             );
             _windowSize = this->camera->getSize();
         }
-        _backGroundColor = sf::Color(this->camera->getColor().getColorInt());
+    }
+
+    void Application::_convertImage()
+    {
+        const std::vector<Color> pixels = camera->getImage().getPixels();
+        std::vector<std::uint8_t> pixelsConverted;
+
+        for (const auto &pixel : pixels) {
+            pixelsConverted.push_back(pixel.red());
+            pixelsConverted.push_back(pixel.green());
+            pixelsConverted.push_back(pixel.blue());
+            pixelsConverted.push_back(pixel.alpha());
+        }
+        _texture.update(pixelsConverted.data());
     }
 
     void Application::run()
@@ -44,18 +60,20 @@ namespace Application {
 
         clock.start();
         while (_window.isOpen()) {
-            _window.clear(_backGroundColor);
-            while (auto event = _window.pollEvent()) {
+            _window.clear(sf::Color::White);
+            while (const auto event = _window.pollEvent()) {
                 if (event->is<sf::Event::Closed>()) {
                     _window.close();
                     _isRunning = false;
                 }
             }
-            _window.display();
+            _convertImage();
+            _window.draw(_sprite);
             if (clock.getElapsedTime().asSeconds() >= 1.0) {
                 refreshConfig();
                 clock.restart();
             }
+            _window.display();
         }
     }
 

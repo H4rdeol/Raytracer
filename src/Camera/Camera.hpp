@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Colors/Colors.hpp"
+#include "Image/Image.hpp"
 
 #include <exception>
 #include <glm/glm.hpp>
@@ -18,13 +18,13 @@
 namespace Application {
     class Camera {
         public:
-            Camera(const std::string &path);
+            explicit Camera(const std::string &path);
             ~Camera() = default;
 
-            class CameraException: public std::exception {
+            class CameraException final : public std::exception {
                 public:
-                    CameraException(const std::string &message);
-                    const char *what() const noexcept override;
+                    explicit CameraException(const std::string &message);
+                    [[nodiscard]] const char *what() const noexcept override;
                 private:
                     std::string _message;
             };
@@ -34,7 +34,7 @@ namespace Application {
             [[nodiscard]] glm::vec3 getPosition() const;
             [[nodiscard]] glm::vec3 getRotation() const;
             [[nodiscard]] double getFov() const;
-            [[nodiscard]] Color getColor() const;
+            [[nodiscard]] Image getImage() const;
             void setWithJson(const nlohmann::basic_json<> &data);
         private:
             bool _changed = false;
@@ -43,6 +43,6 @@ namespace Application {
             glm::vec3 _position;
             glm::vec3 _rotation;
             double _fov;
-            Color _color;
+            Image _image;
     };
 }

@@ -10,12 +10,6 @@
 
 namespace Application {
 
-    Color &Color::operator=(Color &other)
-    {
-        _color = other._color;
-        return *this;
-    }
-
     std::uint8_t Color::red() const
     {
         return _color >> 24;

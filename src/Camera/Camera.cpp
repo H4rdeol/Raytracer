@@ -15,6 +15,7 @@
 
 namespace Application {
     Camera::Camera(const std::string &path)
+        : _image(0, 0)
     {
         std::ifstream file(path);
         std::ostringstream oss;
@@ -26,11 +27,30 @@ namespace Application {
         auto data = nlohmann::json::parse(oss.str());
 
         setWithJson(data);
+        _image = Image(_size.x, _size.y);
+
+        //TEST
+
+        for (std::size_t j = 0; j < _size.y; j++) {
+            for (std::size_t i = 0; i < _size.x; i++) {
+                auto r = static_cast<double>(i) / (_size.x-1);
+                auto g = static_cast<double>(j) / (_size.y-1);
+                auto b = 0.0;
+
+                int ir = static_cast<int>(255.999 * r);
+                int ig = static_cast<int>(255.999 * g);
+                int ib = static_cast<int>(255.999 * b);
+
+                _image.updatePixel(Color(ir, ig, ib), i, j);
+            }
+        }
+
+        //TEST
     }
 
     void Camera::update(const std::string &config)
     {
-        auto data = nlohmann::json::parse(config);
+        const auto data = nlohmann::json::parse(config);
 
         setWithJson(data);
         std::lock_guard<std::mutex> lock(_changedMutex);
@@ -42,17 +62,11 @@ namespace Application {
         auto size = data["camera"]["size"];
         auto position = data["camera"]["position"];
         auto rotation = data["camera"]["rotation"];
-        auto color = data["camera"]["color"];
 
         _size = { size[0], size[1] };
         _position = { position[0], position[1], position[2] };
         _rotation = { rotation[0], rotation[1], rotation[2] };
         _fov = data["camera"]["fov"];
-        Color tmp(color[0], color[1], color[2], (color.size() == 4) ?
-            static_cast<std::uint8_t>(color[3]) :
-            255
-        );
-        _color = tmp;
     }
 
     glm::vec<2, unsigned int> Camera::getSize() const
@@ -75,9 +89,9 @@ namespace Application {
         return _fov;
     }
 
-    Color Camera::getColor() const
+    Image Camera::getImage() const
     {
-        return _color;
+        return _image;
     }
 
     Camera::CameraException::CameraException(const std::string &message) :

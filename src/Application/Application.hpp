@@ -9,13 +9,14 @@
 
 #include "Camera/Camera.hpp"
 #include <SFML/Graphics.hpp>
-#include <SFML/Window/VideoMode.hpp>
 #include <memory>
+
+using point3 = glm::vec3;
 
 namespace Application {
     class Application {
         public:
-            Application(const std::string &path);
+            explicit Application(const std::string &path);
             Application() = delete;
             ~Application() = default;
 
@@ -25,10 +26,13 @@ namespace Application {
         public:
             const std::unique_ptr<Camera> camera;
         private:
+            void _convertImage();
+        private:
             const short _bitPerPixels = 32;
             bool _isRunning = true;
-            sf::Color _backGroundColor;
             sf::RenderWindow _window;
-            glm::vec<2, unsigned int> _windowSize;
+            glm::vec<2, unsigned int> _windowSize{};
+            sf::Texture _texture;
+            sf::Sprite _sprite;
     };
 }
