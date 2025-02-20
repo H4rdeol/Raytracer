@@ -1,5 +1,5 @@
+.idea/
 build/
 *.o
 .cache/
 .vscode/
-.idea/
