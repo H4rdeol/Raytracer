@@ -6,14 +6,24 @@
 */
 
 #include "Camera.hpp"
-#include "Colors/Colors.hpp"
-#include <cstdint>
+#include "Ray/Ray.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <mutex>
 #include <nlohmann/json.hpp>
 
 namespace Application {
+    glm::vec<3, double> operator*(const std::size_t lhs, const glm::vec<3, double> & vec)
+    {
+        return {vec.x * lhs, vec.y * lhs, vec.z * lhs};
+    }
+
+    glm::vec<3, double> operator+(const glm::vec<3, double> & vec, const std::size_t rhs)
+    {
+        return {vec.x + rhs, vec.y + rhs, vec.z + rhs};
+    }
+
     Camera::Camera(const std::string &path)
         : _image(0, 0)
     {
@@ -28,24 +38,42 @@ namespace Application {
 
         setWithJson(data);
         _image = Image(_size.x, _size.y);
+        _initializeValues();
 
         //TEST
 
         for (std::size_t j = 0; j < _size.y; j++) {
             for (std::size_t i = 0; i < _size.x; i++) {
-                auto r = static_cast<double>(i) / (_size.x-1);
-                auto g = static_cast<double>(j) / (_size.y-1);
-                auto b = 0.0;
+                auto pixel_center = _pixel00_loc + (i * _pixel_delta_u) + (j * _pixel_delta_v);
+                auto ray_direction = pixel_center - _camera_center;
+                Raytracer::Ray r(_camera_center, ray_direction);
 
-                int ir = static_cast<int>(255.999 * r);
-                int ig = static_cast<int>(255.999 * g);
-                int ib = static_cast<int>(255.999 * b);
-
-                _image.updatePixel(Color(ir, ig, ib), i, j);
+                _image.updatePixel(Raytracer::Ray::rayColor(r), i, j);
             }
         }
-
         //TEST
+    }
+
+    point3 operator/(const point3 &vec, const double rhs)
+    {
+        return {vec.x / rhs, vec.y / rhs, vec.z / rhs};
+    }
+
+    void Camera::_initializeValues()
+    {
+        constexpr double focal_length = 1.0;
+        constexpr double viewport_height = 2.0;
+        const double viewport_width = viewport_height * (static_cast<double>(_size.x) / _size.y);
+
+        const auto viewport_u = glm::vec<3, double>(viewport_width, 0, 0);
+        constexpr auto viewport_v = glm::vec<3, double>(0, -viewport_height, 0);
+
+        _pixel_delta_u = viewport_u / _size.x;
+        _pixel_delta_v = viewport_v / _size.y;
+
+        const auto viewport_upper_left =
+            _camera_center - glm::vec<3, double>(0, 0, focal_length) - viewport_u / 2 - viewport_v / 2;
+        _pixel00_loc = viewport_upper_left + 0.5 * (_pixel_delta_u + _pixel_delta_v);
     }
 
     void Camera::update(const std::string &config)
@@ -53,7 +81,7 @@ namespace Application {
         const auto data = nlohmann::json::parse(config);
 
         setWithJson(data);
-        std::lock_guard<std::mutex> lock(_changedMutex);
+        std::lock_guard lock(_changedMutex);
         _changed = true;
     }
 

@@ -15,6 +15,8 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
+using point3 = glm::vec<3, double>;
+
 namespace Application {
     class Camera {
         public:
@@ -37,6 +39,8 @@ namespace Application {
             [[nodiscard]] Image getImage() const;
             void setWithJson(const nlohmann::basic_json<> &data);
         private:
+            void _initializeValues();
+        private:
             bool _changed = false;
             std::mutex _changedMutex;
             glm::vec<2, unsigned int> _size;
@@ -44,5 +48,9 @@ namespace Application {
             glm::vec3 _rotation;
             double _fov;
             Image _image;
+            point3 _camera_center = point3(0, 0, 0);
+            glm::vec<3, double> _pixel_delta_u;
+            glm::vec<3, double> _pixel_delta_v;
+            glm::vec<3, double> _pixel00_loc;
     };
 }

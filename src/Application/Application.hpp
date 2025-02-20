@@ -11,8 +11,6 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 
-using point3 = glm::vec3;
-
 namespace Application {
     class Application {
         public:
