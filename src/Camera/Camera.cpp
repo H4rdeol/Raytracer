@@ -6,7 +6,9 @@
 */
 
 #include "Camera.hpp"
-#include "Ray/Ray.hpp"
+#include "Maths/Vec3.hpp"
+#include "Sphere/Sphere.hpp"
+#include "HittableList/HittableList.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -14,16 +16,6 @@
 #include <nlohmann/json.hpp>
 
 namespace Application {
-    glm::vec<3, double> operator*(const std::size_t lhs, const glm::vec<3, double> & vec)
-    {
-        return {vec.x * lhs, vec.y * lhs, vec.z * lhs};
-    }
-
-    glm::vec<3, double> operator+(const glm::vec<3, double> & vec, const std::size_t rhs)
-    {
-        return {vec.x + rhs, vec.y + rhs, vec.z + rhs};
-    }
-
     Camera::Camera(const std::string &path)
         : _image(0, 0)
     {
@@ -40,6 +32,10 @@ namespace Application {
         _image = Image(_size.x, _size.y);
         _initializeValues();
 
+        Raytracer::HittableList world;
+        world.add(std::make_shared<Raytracer::Sphere>(point3(0, 0, -1), 0.5));
+        world.add(std::make_shared<Raytracer::Sphere>(point3(0, -100.5, -1), 100));
+
         //TEST
 
         for (std::size_t j = 0; j < _size.y; j++) {
@@ -48,7 +44,7 @@ namespace Application {
                 auto ray_direction = pixel_center - _camera_center;
                 Raytracer::Ray r(_camera_center, ray_direction);
 
-                _image.updatePixel(Raytracer::Ray::rayColor(r), i, j);
+                _image.updatePixel(Raytracer::Ray::rayColor(r, world), i, j);
             }
         }
         //TEST

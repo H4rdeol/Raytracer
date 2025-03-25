@@ -7,8 +7,6 @@
 
 #include "Image.hpp"
 
-#include <iostream>
-
 namespace Application {
     Image::Image(const std::size_t nb_cols, const std::size_t nb_rows)
                 : _nb_cols(nb_cols), _nb_rows(nb_rows)

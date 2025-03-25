@@ -6,11 +6,9 @@
 */
 
 #include "Application.hpp"
-
-#include <iostream>
-
 #include "Camera/Camera.hpp"
 #include "Colors/Colors.hpp"
+
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
@@ -26,6 +24,11 @@ namespace Application {
             "Raytracer",
             sf::Style::Close
         );
+        sf::Vector2u screenCenter = sf::VideoMode::getDesktopMode().size / 2u;
+        _window.setPosition({
+            static_cast<int>(screenCenter.x - _windowSize.x / 2u),
+            static_cast<int>(screenCenter.y - _windowSize.y / 2u)
+        });
     }
 
     void Application::refreshConfig()

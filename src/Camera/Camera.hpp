@@ -7,15 +7,13 @@
 
 #pragma once
 
+#include "Maths/Vec3.hpp"
 #include "Image/Image.hpp"
 
 #include <exception>
-#include <glm/glm.hpp>
 #include <mutex>
 #include <string>
 #include <nlohmann/json.hpp>
-
-using point3 = glm::vec<3, double>;
 
 namespace Application {
     class Camera {
