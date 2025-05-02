@@ -6,6 +6,7 @@
 */
 
 #include "Colors.hpp"
+#include "Interval/Interval.hpp"
 #include <ostream>
 
 namespace Application {
@@ -33,6 +34,33 @@ namespace Application {
     std::uint32_t Color::getColorInt() const
     {
         return _color;
+    }
+
+    Color &Color::operator+=(const Color &other)
+    {
+        const Maths::Interval rgba(0, 255);
+        const std::uint8_t r = red();
+        const std::uint8_t g = green();
+        const std::uint8_t b = blue();
+        const std::uint8_t a = alpha();
+        const std::uint8_t other_r = other.red();
+        const std::uint8_t other_g = other.green();
+        const std::uint8_t other_b = other.blue();
+        const std::uint8_t other_a = other.alpha();
+
+        _color = Color(
+            rgba.clamp(r + other_r),
+            rgba.clamp(g + other_g),
+            rgba.clamp(b + other_b),
+            rgba.clamp(a + other_a))
+        .getColorInt();
+
+        return *this;
+    }
+
+    Color Color::operator*(const double d) const
+    {
+        return Color(red() * d, green() * d, blue() * d, alpha() * d);
     }
 
     std::ostream &operator<<(std::ostream &out, const Color &color)

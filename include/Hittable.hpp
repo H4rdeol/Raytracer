@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Ray/Ray.hpp"
+#include "Interval/Interval.hpp"
 
 namespace Raytracer {
     class Ray;
@@ -22,6 +23,6 @@ namespace Raytracer {
 
     class Hittable {
         public:
-            virtual bool hit(const Ray &r, double t_min, double t_max, HitRecord &rec) const = 0;
+            virtual bool hit(const Ray &r, Maths::Interval ray_t, HitRecord &rec) const = 0;
     };
 }

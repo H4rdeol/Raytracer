@@ -7,8 +7,10 @@
 
 #pragma once
 
+#include "HittableList/HittableList.hpp"
 #include "Maths/Vec3.hpp"
 #include "Image/Image.hpp"
+#include "Ray/Ray.hpp"
 
 #include <exception>
 #include <mutex>
@@ -36,10 +38,15 @@ namespace Application {
             [[nodiscard]] double getFov() const;
             [[nodiscard]] Image getImage() const;
             void setWithJson(const nlohmann::basic_json<> &data);
+            void render();
         private:
             void _initializeValues();
+            Raytracer::Ray _getRay(int i, int j) const;
+            glm::vec3 _sampleSquare() const;
         private:
             bool _changed = false;
+            unsigned int _sample_per_pixel = 10;
+            double _pixel_samples_scale;
             std::mutex _changedMutex;
             glm::vec<2, unsigned int> _size;
             glm::vec3 _position;
@@ -50,5 +57,6 @@ namespace Application {
             glm::vec<3, double> _pixel_delta_u;
             glm::vec<3, double> _pixel_delta_v;
             glm::vec<3, double> _pixel00_loc;
+            Raytracer::HittableList _world;
     };
 }

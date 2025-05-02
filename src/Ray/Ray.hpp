@@ -9,7 +9,6 @@
 #pragma once
 
 #include "Maths/Vec3.hpp"
-#include "Colors/Colors.hpp"
 #include "Hittable.hpp"
 
 namespace Raytracer {
@@ -25,7 +24,7 @@ namespace Raytracer {
             [[nodiscard]] const glm::vec<3, double> &getDirection() const;
             [[nodiscard]] point3 at(double t) const;
 
-            static Application::Color rayColor(const Ray &r, const Hittable &world);
+            static glm::vec3 rayColor(const Ray &r, const Hittable &world);
         private:
             static double _hitSphere(const point3 &center, double radius, const Ray &r);
             point3 _origin;

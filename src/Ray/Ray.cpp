@@ -7,7 +7,7 @@
 */
 
 #include "Ray.hpp"
-#include "Colors/Colors.hpp"
+#include "Interval/Interval.hpp"
 #include "Maths/Vec3.hpp"
 
 #include <cmath>
@@ -48,18 +48,19 @@ namespace Raytracer {
         return (h - sqrt(discriminant)) / a;
     }
 
-    Application::Color Ray::rayColor(const Ray &r, const Hittable &world)
+    glm::vec3 Ray::rayColor(const Ray &r, const Hittable &world)
     {
         HitRecord rec;
+        static const Maths::Interval intensity(0.000, 0.999);
 
-        if (world.hit(r, 0, Maths::infinity, rec)) {
+        if (world.hit(r, Maths::Interval(0, Maths::infinity), rec)) {
             const glm::vec3 color = 0.5 * (rec.normal + glm::vec3(1, 1, 1));
-            return Application::Color(color.x * 255.999, color.y * 255.999, color.z * 255.999);
+            return color;
         }
         glm::vec3 unit_direction = glm::normalize(r.getDirection());
         const double a = 0.5 * (unit_direction.y + 1.0);
         const glm::vec3 color = (1.0 - a) * glm::vec3(1.0, 1.0, 1.0) + a * glm::vec3(0.5, 0.7, 1.0);
 
-        return Application::Color(color.x * 255.999, color.y * 255.999, color.z * 255.999);
+        return color;
     }
 } // Raytracer

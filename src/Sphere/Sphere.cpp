@@ -13,7 +13,7 @@
 namespace Raytracer {
     Sphere::Sphere(const point3 &center, double radius) : _center(center), _radius(std::fmax(0, radius)) {}
 
-    bool Sphere::hit(const Ray &r, double t_min, double t_max, HitRecord &rec) const
+    bool Sphere::hit(const Ray &r, Maths::Interval ray_t, HitRecord &rec) const
     {
         glm::vec<3, double> oc = _center - r.getOrigin();
         double a = pow(glm::length(r.getDirection()), 2);
@@ -25,9 +25,9 @@ namespace Raytracer {
             return false;
         double sqrtd = std::sqrt(discriminant);
         double root = (h - sqrtd) / a;
-        if (root <= t_min || root >= t_max) {
+        if (!ray_t.surrounds(root)) {
             root = (h + sqrtd) / a;
-            if (root <= t_min || root >= t_max)
+            if (!ray_t.surrounds(root))
                 return false;
         }
         rec.t = root;

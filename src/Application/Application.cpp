@@ -11,6 +11,7 @@
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <memory>
 
@@ -60,6 +61,7 @@ namespace Application {
     void Application::run()
     {
         sf::Clock clock;
+        bool renderLaunched = false;
 
         clock.start();
         while (_window.isOpen()) {
@@ -68,6 +70,13 @@ namespace Application {
                 if (event->is<sf::Event::Closed>()) {
                     _window.close();
                     _isRunning = false;
+                    continue;
+                }
+                if (event->is<sf::Event::KeyPressed>()) {
+                    auto evt = event.value().getIf<sf::Event::KeyPressed>();
+                    if (evt->code == sf::Keyboard::Key::A && !renderLaunched) {
+                        camera->render();
+                    }
                 }
             }
             _convertImage();

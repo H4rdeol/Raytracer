@@ -10,13 +10,14 @@
 #include <vector>
 
 #include "Colors/Colors.hpp"
+#include <glm/glm.hpp>
 
 namespace Application {
 
     class Image {
         public:
             explicit Image(std::size_t nb_cols, std::size_t nb_rows);
-            void updatePixel(const Color &color, std::size_t x, std::size_t y);
+            void updatePixel(const glm::vec3 &color, std::size_t x, std::size_t y);
             [[nodiscard]] std::vector<Color> getPixels() const;
             ~Image() = default;
         private:

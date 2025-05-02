@@ -8,14 +8,15 @@
 #pragma once
 
 #include "Hittable.hpp"
+#include "Interval/Interval.hpp"
 
 namespace Raytracer {
-    class Sphere: public Hittable {
+    class Sphere final: public Hittable {
         public:
             Sphere(const point3 &center, double radius);
             ~Sphere() = default;
 
-            bool hit(const Ray &r, double t_min, double t_max, HitRecord &rec) const override;
+            bool hit(const Ray &r, Maths::Interval ray_t, HitRecord &rec) const override;
         private:
             point3 _center;
             double _radius;

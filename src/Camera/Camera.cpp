@@ -7,10 +7,12 @@
 
 #include "Camera.hpp"
 #include "Maths/Vec3.hpp"
+#include "Ray/Ray.hpp"
 #include "Sphere/Sphere.hpp"
 #include "HittableList/HittableList.hpp"
 
 #include <fstream>
+#include <glm/fwd.hpp>
 #include <iostream>
 #include <mutex>
 #include <nlohmann/json.hpp>
@@ -30,24 +32,42 @@ namespace Application {
 
         setWithJson(data);
         _image = Image(_size.x, _size.y);
+        _sample_per_pixel = 100;
         _initializeValues();
 
-        Raytracer::HittableList world;
-        world.add(std::make_shared<Raytracer::Sphere>(point3(0, 0, -1), 0.5));
-        world.add(std::make_shared<Raytracer::Sphere>(point3(0, -100.5, -1), 100));
+        _world.add(std::make_shared<Raytracer::Sphere>(point3(0, 0, -1), 0.5));
+        _world.add(std::make_shared<Raytracer::Sphere>(point3(0, -100.5, -1), 100));
+    }
 
-        //TEST
-
+    void Camera::render()
+    {
         for (std::size_t j = 0; j < _size.y; j++) {
             for (std::size_t i = 0; i < _size.x; i++) {
-                auto pixel_center = _pixel00_loc + (i * _pixel_delta_u) + (j * _pixel_delta_v);
-                auto ray_direction = pixel_center - _camera_center;
-                Raytracer::Ray r(_camera_center, ray_direction);
-
-                _image.updatePixel(Raytracer::Ray::rayColor(r, world), i, j);
+                glm::vec<3, double> pixelColor(0, 0, 0);
+                for (unsigned int sample = 0; sample < _sample_per_pixel; sample++) {
+                    Raytracer::Ray r = _getRay(i, j);
+                    pixelColor += Raytracer::Ray::rayColor(r, _world);
+                }
+                _image.updatePixel(pixelColor * _pixel_samples_scale, i, j);
             }
         }
-        //TEST
+    }
+
+    glm::vec3 Camera::_sampleSquare() const
+    {
+        return glm::vec3(Maths::random_double() - 0.5, Maths::random_double() - 0.5, 0.0);
+    }
+
+    Raytracer::Ray Camera::_getRay(int i, int j) const
+    {
+        glm::vec3 offset = _sampleSquare();
+        glm::vec<3, double> pixelSample = _pixel00_loc
+            + ((i + offset.x) * _pixel_delta_u)
+            + ((j + offset.y) * _pixel_delta_v);
+        const point3 rayOrigin = _camera_center;
+        const glm::vec<3, double> rayDirection = pixelSample - rayOrigin;
+
+        return Raytracer::Ray(rayOrigin, rayDirection);
     }
 
     point3 operator/(const point3 &vec, const double rhs)
@@ -70,6 +90,7 @@ namespace Application {
         const auto viewport_upper_left =
             _camera_center - glm::vec<3, double>(0, 0, focal_length) - viewport_u / 2 - viewport_v / 2;
         _pixel00_loc = viewport_upper_left + 0.5 * (_pixel_delta_u + _pixel_delta_v);
+        _pixel_samples_scale = 1.0 / _sample_per_pixel;
     }
 
     void Camera::update(const std::string &config)

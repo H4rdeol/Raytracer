@@ -23,6 +23,8 @@ namespace Application {
             ~Color() = default;
 
             Color &operator=(const Color &other) = default;
+            Color &operator+=(const Color &other);
+            Color operator*(const double d) const;
             [[nodiscard]] std::uint8_t red() const;
             [[nodiscard]] std::uint8_t green() const;
             [[nodiscard]] std::uint8_t blue() const;
