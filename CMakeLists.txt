@@ -20,7 +20,7 @@ else()
 endif()
 
 find_package(SFML 3.0 REQUIRED COMPONENTS Graphics Audio System Window)
-find_package(nlohmann_json 3.11.3 REQUIRED)
+find_package(nlohmann_json REQUIRED)
 find_package(glm 0.9.9.8 REQUIRED)
 
 #find all cpp in src directory and subdirectories
@@ -38,7 +38,7 @@ target_include_directories(my_program
 )
 target_link_libraries(my_program
     PRIVATE SFML::Graphics SFML::Audio SFML::System SFML::Window
-    nlohmann_json::nlohmann_json
+    # nlohmann_json::nlohmann_json
 )
 
 add_custom_target(clean_build
