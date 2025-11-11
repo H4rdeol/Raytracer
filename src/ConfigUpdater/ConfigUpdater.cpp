@@ -6,6 +6,7 @@
 */
 
 #include "ConfigUpdater.hpp"
+#include <print>
 
 namespace Observer {
     ConfigUpdater::ConfigUpdater(const std::string &input_path, const std::string &output_path)
@@ -40,7 +41,7 @@ namespace Observer {
             Observer::ConfigSubject subject(config_path, _input);
             Observer::ConfigObserver observer(subject, _output);
             subject.notifyObservers();
-            std::cout << "Stoping observer: don't refresh config anymore" << std::endl;
+            std::println("Stoping observer: don't refresh config anymore");
             _exit(0);
         }
     }

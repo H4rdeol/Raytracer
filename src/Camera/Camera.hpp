@@ -13,9 +13,10 @@
 #include "Ray/Ray.hpp"
 
 #include <exception>
-#include <mutex>
 #include <string>
 #include <nlohmann/json.hpp>
+#include <thread>
+#include <vector>
 
 namespace Application {
     class Camera {
@@ -44,10 +45,10 @@ namespace Application {
             Raytracer::Ray _getRay(int i, int j) const;
             glm::vec3 _sampleSquare() const;
         private:
-            bool _changed = false;
+            const size_t _nbThreads = std::thread::hardware_concurrency();
+            std::vector<std::jthread> _threads;
             unsigned int _sample_per_pixel = 10;
             double _pixel_samples_scale;
-            std::mutex _changedMutex;
             glm::vec<2, unsigned int> _size;
             glm::vec3 _position;
             glm::vec3 _rotation;

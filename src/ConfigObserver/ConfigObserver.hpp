@@ -11,8 +11,6 @@
 #include "ASubject.hpp"
 #include "NamePipe/NamePipe.hpp"
 
-#include <iostream>
-
 namespace Observer {
     class ConfigObserver final: public IObserver {
         public:

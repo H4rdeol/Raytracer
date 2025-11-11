@@ -11,10 +11,9 @@
 #include "Sphere/Sphere.hpp"
 #include "HittableList/HittableList.hpp"
 
+#include <cmath>
 #include <fstream>
 #include <glm/fwd.hpp>
-#include <iostream>
-#include <mutex>
 #include <nlohmann/json.hpp>
 
 namespace Application {
@@ -41,14 +40,26 @@ namespace Application {
 
     void Camera::render()
     {
-        for (std::size_t j = 0; j < _size.y; j++) {
-            for (std::size_t i = 0; i < _size.x; i++) {
-                glm::vec<3, double> pixelColor(0, 0, 0);
-                for (unsigned int sample = 0; sample < _sample_per_pixel; sample++) {
-                    Raytracer::Ray r = _getRay(i, j);
-                    pixelColor += Raytracer::Ray::rayColor(r, _world);
-                }
-                _image.updatePixel(pixelColor * _pixel_samples_scale, i, j);
+        const unsigned int nbSquare = static_cast<unsigned int>(std::sqrt(_nbThreads));
+        const unsigned int rectSizeX = _size.x / nbSquare;
+        const unsigned int rectSizeY = _size.y / nbSquare;
+    
+        for (size_t row = 0; row < nbSquare; row++)
+        {
+            for (size_t column = 0; column < nbSquare; column++)
+            {
+                _threads.emplace_back(([this, row, rectSizeY, rectSizeX, column]() {
+                    for (std::size_t j = row * rectSizeY; j < row * rectSizeY + rectSizeY; j++) {
+                        for (std::size_t i = column * rectSizeX; i < column * rectSizeX + rectSizeX; i++) {
+                            glm::vec<3, double> pixelColor(0, 0, 0);
+                            for (unsigned int sample = 0; sample < _sample_per_pixel; sample++) {
+                                Raytracer::Ray r = _getRay(i, j);
+                                pixelColor += Raytracer::Ray::rayColor(r, _world);
+                            }
+                            _image.updatePixel(pixelColor * _pixel_samples_scale, i, j);
+                        }
+                    }
+                }));
             }
         }
     }
@@ -98,8 +109,6 @@ namespace Application {
         const auto data = nlohmann::json::parse(config);
 
         setWithJson(data);
-        std::lock_guard lock(_changedMutex);
-        _changed = true;
     }
 
     void Camera::setWithJson(const nlohmann::basic_json<> &data)

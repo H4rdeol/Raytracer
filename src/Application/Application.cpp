@@ -73,7 +73,7 @@ namespace Application {
                     continue;
                 }
                 if (event->is<sf::Event::KeyPressed>()) {
-                    auto evt = event.value().getIf<sf::Event::KeyPressed>();
+                    const sf::Event::KeyPressed *evt = event.value().getIf<sf::Event::KeyPressed>();
                     if (evt->code == sf::Keyboard::Key::A && !renderLaunched) {
                         camera->render();
                     }

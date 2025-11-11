@@ -6,6 +6,7 @@
 */
 
 #include "ConfigObserver.hpp"
+#include <print>
 
 namespace Observer {
     ConfigObserver::ConfigObserver(ASubject &subject, const std::shared_ptr<IPC::NamePipe> pipe)
@@ -19,7 +20,7 @@ namespace Observer {
         try {
             _pipe->write(data);
         } catch (const IPC::NamePipe::PipeError &e) {
-            std::cerr << "Error: " << e.what() << std::endl;
+            std::println(std::cerr, "Error: {}", e.what());
         }
     }
 }
