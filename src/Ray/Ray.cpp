@@ -59,12 +59,17 @@ namespace Raytracer {
 
         if (world.hit(r, Maths::Interval(0.001, Maths::infinity), rec)) {
             const glm::vec3 direction = glm::vec<3, double>{rec.normal.x, rec.normal.y, rec.normal.z} + Maths::randomUnitVector();
-            return 0.1 * rayColor(Ray(rec.p, direction), maxDepth - 1, world);
+            return 0.3 * rayColor(Ray(rec.p, direction), maxDepth - 1, world);
         }
         glm::vec3 unit_direction = glm::normalize(r.getDirection());
         const double a = 0.5 * (unit_direction.y + 1.0);
         const glm::vec3 color = (1.0 - a) * glm::vec3(1.0, 1.0, 1.0) + a * glm::vec3(0.5, 0.7, 1.0);
 
-        return color;
+        const glm::vec3 gammaRectifiedColor(
+            Maths::linearToGamma(color.x),
+            Maths::linearToGamma(color.y),
+            Maths::linearToGamma(color.z)
+        );
+        return gammaRectifiedColor;
     }
 } // Raytracer

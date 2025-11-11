@@ -35,6 +35,13 @@ namespace Maths {
         return min + (max - min) * randomDouble();
     }
 
+    constexpr inline double linearToGamma(double linearComponent)
+    {
+        if (linearComponent > 0)
+            return std::sqrt(linearComponent);
+        return 0;
+    }
+
     constexpr double infinity = std::numeric_limits<double>::infinity();
 
     constexpr inline glm::vec<3, double> randomUnitVector()
