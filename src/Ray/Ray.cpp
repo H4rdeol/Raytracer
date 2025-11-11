@@ -12,6 +12,7 @@
 
 #include <cmath>
 #include <glm/detail/qualifier.hpp>
+#include <glm/fwd.hpp>
 #include <glm/geometric.hpp>
 
 namespace Raytracer {
@@ -48,14 +49,17 @@ namespace Raytracer {
         return (h - sqrt(discriminant)) / a;
     }
 
-    glm::vec3 Ray::rayColor(const Ray &r, const Hittable &world)
+    glm::vec3 Ray::rayColor(const Ray &r, const int maxDepth, const Hittable &world)
     {
+        if (maxDepth <= 0)
+            return glm::vec3(0);
+
         HitRecord rec;
         static const Maths::Interval intensity(0.000, 0.999);
 
-        if (world.hit(r, Maths::Interval(0, Maths::infinity), rec)) {
-            const glm::vec3 color = 0.5 * (rec.normal + glm::vec3(1, 1, 1));
-            return color;
+        if (world.hit(r, Maths::Interval(0.001, Maths::infinity), rec)) {
+            const glm::vec3 direction = glm::vec<3, double>{rec.normal.x, rec.normal.y, rec.normal.z} + Maths::randomUnitVector();
+            return 0.1 * rayColor(Ray(rec.p, direction), maxDepth - 1, world);
         }
         glm::vec3 unit_direction = glm::normalize(r.getDirection());
         const double a = 0.5 * (unit_direction.y + 1.0);

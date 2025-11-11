@@ -48,6 +48,7 @@ namespace Application {
             const size_t _nbThreads = std::thread::hardware_concurrency();
             std::vector<std::jthread> _threads;
             unsigned int _sample_per_pixel = 10;
+            int _maxDepth = 10;
             double _pixel_samples_scale;
             glm::vec<2, unsigned int> _size;
             glm::vec3 _position;

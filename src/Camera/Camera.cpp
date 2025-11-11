@@ -32,6 +32,7 @@ namespace Application {
         setWithJson(data);
         _image = Image(_size.x, _size.y);
         _sample_per_pixel = 100;
+        _maxDepth = 50;
         _initializeValues();
 
         _world.add(std::make_shared<Raytracer::Sphere>(point3(0, 0, -1), 0.5));
@@ -54,7 +55,7 @@ namespace Application {
                             glm::vec<3, double> pixelColor(0, 0, 0);
                             for (unsigned int sample = 0; sample < _sample_per_pixel; sample++) {
                                 Raytracer::Ray r = _getRay(i, j);
-                                pixelColor += Raytracer::Ray::rayColor(r, _world);
+                                pixelColor += Raytracer::Ray::rayColor(r, _maxDepth, _world);
                             }
                             _image.updatePixel(pixelColor * _pixel_samples_scale, i, j);
                         }
@@ -66,7 +67,7 @@ namespace Application {
 
     glm::vec3 Camera::_sampleSquare() const
     {
-        return glm::vec3(Maths::random_double() - 0.5, Maths::random_double() - 0.5, 0.0);
+        return glm::vec3(Maths::randomDouble() - 0.5, Maths::randomDouble() - 0.5, 0.0);
     }
 
     Raytracer::Ray Camera::_getRay(int i, int j) const

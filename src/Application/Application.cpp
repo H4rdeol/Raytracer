@@ -74,9 +74,8 @@ namespace Application {
                 }
                 if (event->is<sf::Event::KeyPressed>()) {
                     const sf::Event::KeyPressed *evt = event.value().getIf<sf::Event::KeyPressed>();
-                    if (evt->code == sf::Keyboard::Key::A && !renderLaunched) {
-                        camera->render();
-                    }
+                    if (evt->code == sf::Keyboard::Key::A && !renderLaunched)
+                        camera->render(); // TODO: @LO Segfault when quit during rendering
                 }
             }
             _convertImage();
